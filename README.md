@@ -3,7 +3,7 @@
 
 Repositorio central con el código fuente y recursos de los proyectos grupales correspondientes a la materia de Multimedia de la Carrera de Informática (UMSA).
 
-## 👥 Equipo de Trabajo
+##  Equipo de Trabajo
 * **Integrante 1:** [Nombre y Apellidos]
 * **Integrante 2:** [Nombre y Apellidos]
 * **Integrante 3:** [Nombre y Apellidos]
@@ -11,7 +11,7 @@ Repositorio central con el código fuente y recursos de los proyectos grupales c
 
 ---
 
-## 🚀 Proyectos Incluidos
+##  Proyectos Incluidos
 
 Este repositorio contiene el desarrollo de las siguientes actividades grupales:
 
@@ -28,7 +28,7 @@ Desarrollo de entornos virtuales interactivos exportados para visualización en 
 
 ---
 
-## ⚙️ Instalación y Ejecución
+##  Instalación y Ejecución
 
 A continuación, se detallan los pasos para ejecutar cada módulo del proyecto en un entorno local:
 
