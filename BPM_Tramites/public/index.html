@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Trámites UMSA</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI', sans-serif;
+        }
+
+        body{
+            height:100vh;
+            background:linear-gradient(
+                135deg,
+                #003366,
+                #00509d
+            );
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .login-container{
+
+            width:900px;
+            height:500px;
+
+            background:white;
+
+            border-radius:20px;
+
+            overflow:hidden;
+
+            box-shadow:0 10px 30px rgba(0,0,0,.3);
+
+            display:flex;
+        }
+
+        .left-panel{
+
+            width:50%;
+
+            background:#003366;
+
+            color:white;
+
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+
+            padding:40px;
+        }
+
+        .left-panel h1{
+            font-size:42px;
+            margin-bottom:20px;
+        }
+
+        .left-panel p{
+            text-align:center;
+            line-height:1.6;
+        }
+
+        .logo{
+
+            width:120px;
+            height:120px;
+
+            background:white;
+            color:#003366;
+
+            border-radius:50%;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            font-size:50px;
+
+            margin-bottom:25px;
+        }
+
+        .right-panel{
+
+            width:50%;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .login-box{
+
+            width:80%;
+        }
+
+        .login-box h2{
+
+            color:#003366;
+            margin-bottom:25px;
+            text-align:center;
+        }
+
+        .input-group{
+
+            margin-bottom:20px;
+        }
+
+        .input-group label{
+
+            display:block;
+            margin-bottom:8px;
+
+            font-weight:bold;
+        }
+
+        .input-group input{
+
+            width:100%;
+            padding:12px;
+
+            border:1px solid #ccc;
+
+            border-radius:8px;
+
+            font-size:15px;
+        }
+
+        .btn-login{
+
+            width:100%;
+            padding:14px;
+
+            border:none;
+
+            background:#003366;
+
+            color:white;
+
+            border-radius:8px;
+
+            font-size:16px;
+
+            cursor:pointer;
+
+            transition:.3s;
+        }
+
+        .btn-login:hover{
+
+            background:#00509d;
+        }
+
+        #mensaje{
+
+            margin-top:15px;
+            text-align:center;
+            color:red;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+
+    <div class="left-panel">
+
+        <div class="logo">
+            🎓
+        </div>
+
+        <h1>UMSA</h1>
+
+        <p>
+            Sistema de Digitalización de Trámites Universitarios
+            <br><br>
+            Inscripción de Materias y Solicitud de Título Universitario
+        </p>
+
+    </div>
+
+    <div class="right-panel">
+
+        <div class="login-box">
+
+            <h2>Iniciar Sesión</h2>
+
+            <div class="input-group">
+                <label>Registro Universitario (RU)</label>
+                <input
+                    type="text"
+                    id="ru"
+                    placeholder="Ingrese su RU">
+            </div>
+
+            <div class="input-group">
+                <label>Contraseña</label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Ingrese su contraseña">
+            </div>
+
+            <button
+                class="btn-login"
+                onclick="login()">
+
+                Ingresar
+
+            </button>
+
+            <p id="mensaje"></p>
+                        
+            <p id="mensaje"></p>
+
+            <div class="registro-link">
+                ¿No tienes una cuenta?
+                <a href="registro.html">Regístrate aquí</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+async function login(){
+
+    const ru =
+        document.getElementById("ru").value;
+
+    const password =
+        document.getElementById("password").value;
+
+    const respuesta =
+        await fetch(
+            "/login",
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:JSON.stringify({
+                    ru,
+                    password
+                })
+            }
+        );
+
+    const datos =
+        await respuesta.json();
+
+    if(datos.success){
+
+        localStorage.setItem(
+            "usuarioActivo",
+            JSON.stringify(
+                datos.usuario
+            )
+        );
+
+        window.location.href =
+            "dashboard.html";
+    }
+    else{
+
+        document.getElementById(
+            "mensaje"
+        ).innerHTML =
+        datos.mensaje;
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,7 +1,156 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio Multimedia - Proyectos Grupales</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #27ae60;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            width: 100%;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .university-badge {
+            margin-top: 10px;
+            font-weight: bold;
+            color: var(--secondary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            padding: 3rem 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 5px solid var(--secondary-color);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            margin-bottom: 2rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #219653;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 1.5rem;
+            text-align: center;
+            width: 100%;
+            background-color: #e0e6ed;
+            color: #555;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
 <body>
-    <h1>En construcción: Sistema de Trámites</h1>
-    <p>Aquí mi compañero subirá sus formularios.</p>
+
+    <header>
+        <h1>Portafolio de Producción Multimedia</h1>
+        <p>Evaluación de Proyectos Grupales</p>
+        <div class="university-badge">Universidad Mayor de San Andrés - Carrera de Informática</div>
+    </header>
+
+    <div class="container">
+        <!-- Tarjeta 1: Trámites -->
+        <div class="card">
+            <h2>Digitalización de Trámites</h2>
+            <p>Sistema de gestión y modelado BPM para trámites universitarios, utilizando almacenamiento dinámico en formato JSON.</p>
+            <a href="./BPM_Tramites/index.html" class="btn">Ingresar al Sistema</a>
+        </div>
+
+        <!-- Tarjeta 2: Unity -->
+        <div class="card">
+            <h2>Coreografía 3D (Unity)</h2>
+            <p>Escena interactiva desarrollada en Unity exportada a WebGL, mostrando personajes con animaciones sincronizadas al ritmo de la música.</p>
+            <a href="./Unity_Animacion/index.html" class="btn">Ver Coreografía</a>
+        </div>
+
+        <!-- Tarjeta 3: Fotogrametría -->
+        <div class="card">
+            <h2>Avatar Digital 3D</h2>
+            <p>Modelo tridimensional realista generado mediante técnicas de fotogrametría a partir de capturas fotográficas reales.</p>
+            <a href="./Fotogrametria/index.html" class="btn">Visualizar Modelo</a>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 - Repositorio Oficial del Grupo. Todos los derechos reservados.
+    </footer>
+
 </body>
 </html>

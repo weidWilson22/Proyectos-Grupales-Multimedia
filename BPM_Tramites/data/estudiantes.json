@@ -1,0 +1,37 @@
+[
+    {
+        "ru": "2021",
+        "nombre": "Juan Pérez",
+        "carrera": "Informática",
+        "correo": "[juan.perez@umsa.bo](mailto:juan.perez@umsa.bo)",
+        "password": "12345"
+    },
+    {
+        "ru": "2022",
+        "nombre": "María López",
+        "carrera": "Ingeniería de Sistemas",
+        "correo": "[maria.lopez@umsa.bo](mailto:maria.lopez@umsa.bo)",
+        "password": "12345"
+    },
+    {
+        "ru": "2023",
+        "nombre": "Carlos Quispe",
+        "carrera": "Estadística",
+        "correo": "[carlos.quispe@umsa.bo](mailto:carlos.quispe@umsa.bo)",
+        "password": "12345"
+    },
+    {
+        "nombre": "Pepe",
+        "ru": "2024",
+        "carrera": "Ingeniería de Sistemas",
+        "correo": "pepe@gmail.com",
+        "password": "12345"
+    },
+    {
+        "nombre": "Dany",
+        "ru": "2025",
+        "carrera": "Informática",
+        "correo": "dany@gmail.com",
+        "password": "12345"
+    }
+]

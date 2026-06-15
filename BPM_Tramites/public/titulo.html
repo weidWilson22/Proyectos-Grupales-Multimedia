@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Título Profesional</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f4f6f9; }
+        header { background: #003366; color: white; padding: 20px; text-align: center; }
+        .container { width: 90%; max-width: 800px; margin: 30px auto; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,.15); }
+        h2 { color: #003366; margin-bottom: 15px; border-bottom: 2px solid #003366; padding-bottom: 5px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; }
+        select, input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; background: #003366; color: white; cursor: pointer; font-size: 15px; width: 100%; }
+        .btn:hover { background: #00509d; }
+        .btn:disabled { background: #ccc; cursor: not-allowed; }
+        .alerta { padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; text-align: center; }
+        .alerta-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .alerta-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        #mensaje { margin-top: 20px; font-weight: bold; text-align: center; }
+        .btn-regresar { background: #6c757d; margin-top: 10px; }
+        .btn-regresar:hover { background: #5a6268; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🎓 División de Títulos y Diplomas UMSA</h1>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h2>📋 Verificación Académica</h2>
+        <div id="validacionEstudiante">Cargando datos y validando expediente...</div>
+        
+        <div id="formularioTramite" style="display: none; margin-top: 20px;">
+            <h2>📝 Formulario de Solicitud</h2>
+            <div class="form-group">
+                <label for="modalidad">Modalidad de Titulación:</label>
+                <select id="modalidad" onchange="evaluarModalidad()">
+                    <option value="Excelencia Académica">Excelencia Académica</option>
+                    <option value="Tesis de Grado">Tesis de Grado</option>
+                    <option value="Trabajo Dirigido">Trabajo Dirigido</option>
+                    <option value="Proyecto de Grado">Proyecto de Grado</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="grupoProyecto" style="display: none;">
+                <label for="proyecto">Título del Proyecto / Tesis:</label>
+                <input type="text" id="proyecto" placeholder="Escriba el nombre de su investigación técnica">
+            </div>
+            
+            <button class="btn" id="btnEnviar" onclick="enviarSolicitud()">Iniciar Trámite de Titulación</button>
+        </div>
+        
+        <p id="mensaje"></p>
+        
+        <button class="btn btn-regresar" onclick="location.href='dashboard.html'">Volver al Menú</button>
+    </div>
+</div>
+
+<script>
+let usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
+
+if (!usuario) {
+    alert("Sesión inválida.");
+    window.location.href = "index.html";
+}
+
+let todasLasMaterias = [];
+let recordEstudiante = null;
+
+// Cargar datos académicos para contrastar reglas de negocio
+Promise.all([
+    fetch("/data/materias.json").then(r => r.json()),
+    fetch("/data/record_academico.json").then(r => r.json())
+])
+.then(([materias, records]) => {
+    todasLasMaterias = materias;
+    recordEstudiante = records.find(r => r.ru === usuario.ru);
+    
+    verificarElegibilidad();
+})
+.catch(err => console.error("Error al conectar con los almacenes JSON:", err));
+
+function verificarElegibilidad() {
+    const contenedor = document.getElementById("validacionEstudiante");
+    const formulario = document.getElementById("formularioTramite");
+    
+    if (!recordEstudiante) {
+        contenedor.innerHTML = `<div class="alerta alerta-error">❌ No se encontró historial académico registrado para el RU ${usuario.ru}.</div>`;
+        return;
+    }
+    
+    // Regla BPM: Cantidad de aprobadas debe ser igual al universo total de materias del plan
+    const totalPlan = todasLasMaterias.length;
+    const totalAprobadas = recordEstudiante.materiasAprobadas.length;
+    
+    if (totalAprobadas >= totalPlan) {
+        contenedor.innerHTML = `
+            <div class="alerta alerta-success">✔️ ¡Expediente Valido! Has aprobado las ${totalAprobadas} materias del plan curricular.</div>
+            <strong>Postulante:</strong> ${usuario.nombre}<br>
+            <strong>Carrera:</strong> ${usuario.carrera}<br>
+        `;
+        formulario.style.display = "block"; // Habilitamos el formulario si cumple
+    } else {
+        const faltantes = totalPlan - totalAprobadas;
+        contenedor.innerHTML = `
+            <div class="alerta alerta-error">❌ Trámite Bloqueado: No cumples con los requisitos de egreso.</div>
+            <p>Para iniciar la modalidad de titulación debes concluir el plan de estudios.</p><br>
+            <strong>Materias Aprobadas:</strong> ${totalAprobadas} de ${totalPlan}<br>
+            <strong>Materias Faltantes:</strong> ${faltantes} asignaturas.
+        `;
+    }
+}
+
+function evaluarModalidad() {
+    const mod = document.getElementById("modalidad").value;
+    const grupoProyecto = document.getElementById("grupoProyecto");
+    
+    // Si requiere defensa, habilitamos el campo de texto para el título del proyecto
+    if (mod === "Excelencia Académica") {
+        grupoProyecto.style.display = "none";
+        document.getElementById("proyecto").value = "";
+    } else {
+        grupoProyecto.style.display = "block";
+    }
+}
+
+async function enviarSolicitud() {
+    const mod = document.getElementById("modalidad").value;
+    const proy = document.getElementById("proyecto").value;
+    
+    if (mod !== "Excelencia Académica" && !proy.trim()) {
+        alert("Por favor, introduzca el nombre de su tema de grado.");
+        return;
+    }
+    
+    const btn = document.getElementById("btnEnviar");
+    btn.disabled = true;
+    
+    const payload = {
+        ru: usuario.ru,
+        modalidad: mod,
+        proyecto: proy
+    };
+    
+    try {
+        const res = await fetch('/solicitud-titulo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        const datos = await res.json();
+        const msg = document.getElementById("mensaje");
+        
+        if (res.ok) {
+            msg.style.color = "green";
+            msg.innerHTML = `✔️ Solicitud enviada al área de Títulos.<br>Código de Trámite asignado: <strong>${datos.id_tramite}</strong>`;
+            document.getElementById("formularioTramite").style.display = "none";
+        } else {
+            msg.style.color = "red";
+            msg.innerHTML = `❌ Error: ${datos.mensaje}`;
+            btn.disabled = false;
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Fallo de comunicación con la infraestructura del servidor.");
+        btn.disabled = false;
+    }
+}
+</script>
+</body>
+</html>

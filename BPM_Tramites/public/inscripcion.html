@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Inscripción de Materias</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+header{
+
+    background:#003366;
+    color:white;
+
+    padding:20px;
+
+    text-align:center;
+}
+
+.container{
+
+    width:90%;
+    max-width:1200px;
+
+    margin:30px auto;
+}
+
+.card{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
+}
+
+h2{
+
+    color:#003366;
+
+    margin-bottom:15px;
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:15px;
+}
+
+table th{
+
+    background:#003366;
+
+    color:white;
+}
+
+table th,
+table td{
+
+    border:1px solid #ddd;
+
+    padding:12px;
+
+    text-align:center;
+}
+
+ul{
+
+    margin-left:25px;
+
+    margin-top:10px;
+}
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    background:rgba(0,0,0,.5);
+
+    justify-content:center;
+    align-items:center;
+}
+
+.modal-content{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:10px;
+
+    width:350px;
+
+    text-align:center;
+}
+
+.modal-content button{
+
+    margin:10px;
+    padding:10px 20px;
+}
+.btn{
+
+    margin-top:20px;
+
+    padding:12px 25px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#003366;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:15px;
+}
+
+.btn:hover{
+
+    background:#00509d;
+}
+
+#mensaje{
+
+    margin-top:20px;
+
+    font-weight:bold;
+
+    color:green;
+}
+
+hr{
+
+    margin:20px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>📚 Sistema de Inscripción de Materias UMSA</h1>
+
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>📋 Datos del Estudiante</h2>
+
+        <div id="estudiante"></div>
+
+        <hr>
+
+        <h2>📚 Récord Académico</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Código</th>
+                    <th>Materia</th>
+                    <th>Nota</th>
+                    <th>Estado</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="recordBody">
+
+            </tbody>
+
+        </table>
+
+        <hr>
+
+        <h2>✅ Materias Aprobadas</h2>
+
+        <ul id="materiasAprobadas">
+
+        </ul>
+
+        <hr>
+
+        <h2>📝 Materias Habilitadas para Inscripción</h2>
+
+        <table>
+
+    <thead>
+
+        <tr>
+            <th>Código</th>
+            <th>Materia</th>
+            <th>Cupos</th>
+            <th>Estado</th>
+            <th>Acción</th>
+        </tr>
+
+    </thead>
+
+    <tbody id="materiasBody">
+
+    </tbody>
+
+</table>
+
+        <button class="btn" onclick="enviarTramiteFinal()">Confirmar Inscripción</button>
+        <button class="btn" id="btnVerBoleta" onclick="mostrarBoletaGuardada()" style="background-color: #00509d; margin-top: 10px;">
+    📋 Mostrar Boleta de Inscripción
+</button>
+        <p id="mensaje"></p>
+
+    </div>
+
+</div>
+<script>
+// Recuperamos el usuario logueado en la sesión anterior
+let usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
+
+if (!usuario) {
+    alert("No hay usuario logueado");
+    throw new Error("usuarioActivo no encontrado");
+}
+
+
+let materias = [];
+let recordData = [];
+let aprobadas = [];
+let inscritasEnSesion = []; // Almacena los códigos de materias ya tramitadas con éxito
+let materiasSeleccionadas = []; // Almacena temporalmente los códigos en proceso de selección
+let materiaPorConfirmar = null; // Guarda temporalmente la materia abierta en el popup individual
+
+
+const inscripcionesClave = `inscritas_${usuario.ru}`;
+let historialInscrito = localStorage.getItem(inscripcionesClave);
+if (historialInscrito) {
+    inscritasEnSesion = JSON.parse(historialInscrito);
+}
+
+
+document.getElementById("estudiante").innerHTML = `
+    <strong>Nombre:</strong> ${usuario.nombre}<br>
+    <strong>RU:</strong> ${usuario.ru}<br>
+    <strong>Carrera:</strong> ${usuario.carrera}
+`;
+
+
+Promise.all([
+    fetch("/data/materias.json").then(r => r.json()),
+    fetch("/data/record_academico.json").then(r => r.json())
+])
+.then(([materiasData, record]) => {
+    materias = materiasData;
+    recordData = record;
+
+    // Buscamos el récord académico que corresponda al RU del estudiante logueado
+    let estudiante = recordData.find(r => r.ru === usuario.ru);
+
+    if (estudiante) {
+        aprobadas = estudiante.materiasAprobadas.map(m => m.codigo);
+    }
+
+    // Pintamos la información en la pantalla
+    renderRecord(estudiante);
+    renderMaterias();
+})
+.catch(err => console.error("ERROR CRÍTICO AL CARGAR LOS ARCHIVOS JSON:", err));
+
+
+function renderRecord(estudiante) {
+    let tablaRecord = document.getElementById("recordBody");
+    let listaAprobadas = document.getElementById("materiasAprobadas");
+
+    tablaRecord.innerHTML = "";
+    listaAprobadas.innerHTML = "";
+
+    if (!estudiante || !estudiante.materiasAprobadas) {
+        tablaRecord.innerHTML = `<tr><td colspan="4">No se registran materias en el historial.</td></tr>`;
+        return;
+    }
+
+    estudiante.materiasAprobadas.forEach(m => {
+        tablaRecord.innerHTML += `
+            <tr>
+                <td>${m.codigo}</td>
+                <td>${m.nombre}</td>
+                <td>${m.nota}</td>
+                <td>✅ Aprobada</td>
+            </tr>
+        `;
+
+        listaAprobadas.innerHTML += `<li>${m.codigo} - ${m.nombre}</li>`;
+    });
+}
+
+
+function puedeInscribirse(materia) {
+    return (materia.prerrequisitos || []).every(pr =>
+        aprobadas.includes(pr)
+    );
+}
+
+
+function renderMaterias() {
+    let tablaMaterias = document.getElementById("materiasBody");
+    tablaMaterias.innerHTML = "";
+
+    // Filtramos para mostrar lo habilitado y quitar lo que ya está aprobado históricamente
+    const materiasHabilitadas = materias.filter(m => 
+        puedeInscribirse(m) && !aprobadas.includes(m.codigo)
+    );
+
+    if (materiasHabilitadas.length === 0) {
+        tablaMaterias.innerHTML = `<tr><td colspan="5">No tienes materias habilitadas para este periodo.</td></tr>`;
+        return;
+    }
+
+    materiasHabilitadas.forEach(m => {
+        // Verificamos si ya completó el flujo de inscripción para esta materia
+        const yaInscritaOficial = inscritasEnSesion.includes(m.codigo);
+        const yaSeleccionada = materiasSeleccionadas.includes(m.codigo);
+        
+        let estado = "";
+        let textoBoton = "";
+        let estiloBoton = "";
+        let propiedadDisabled = "";
+        let accionBoton = "";
+
+        // EVALUACIÓN DE ESTADOS DINÁMICOS
+        if (yaInscritaOficial) {
+            estado = "<span style='color: #003366; font-weight: bold;'>📝 Inscrito (Cursando)</span>";
+            textoBoton = "Inscrito";
+            estiloBoton = "style='background-color: #6c757d; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: not-allowed;'";
+            propiedadDisabled = "disabled"; 
+            accionBoton = "";
+        } else if (yaSeleccionada) {
+            estado = "Seleccionada ⭐";
+            textoBoton = "Quitar";
+            estiloBoton = "style='background-color: #d9534f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;'";
+            accionBoton = `conmutarMateria('${m.codigo}')`;
+        } else {
+            estado = "Disponible";
+            textoBoton = "Seleccionar";
+            estiloBoton = "style='background-color: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;'";
+            accionBoton = `abrirModalCupos('${m.codigo}', '${m.nombre}', 30)`;
+        }
+
+        tablaMaterias.innerHTML += `
+            <tr>
+                <td><strong>${m.codigo}</strong></td>
+                <td>${m.nombre}</td>
+                <td>30</td>
+                <td><em>${estado}</em></td>
+                <td>
+                    <button ${estiloBoton} onclick="${accionBoton}" ${propiedadDisabled}>
+                        ${textoBoton}
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+
+function conmutarMateria(codigo) {
+    const indice = materiasSeleccionadas.indexOf(codigo);
+    if (indice !== -1) {
+        materiasSeleccionadas.splice(indice, 1);
+    }
+    renderMaterias();
+}
+
+
+function abrirModalCupos(codigo, nombre, cupos) {
+    materiaPorConfirmar = codigo;
+
+    document.getElementById("detalleMateria").innerHTML = `
+        <strong>Materia:</strong> ${nombre} (${codigo})<br><br>
+        <span style="color: #003366; font-size: 18px;">📊 <strong>Cupos Disponibles:</strong> ${cupos}</span>
+    `;
+
+    const modalContent = document.querySelector(".modal-content");
+    modalContent.querySelector("h3").innerText = "Información de Cupo";
+    
+    const btnConfirmar = modalContent.querySelector("button");
+    if (btnConfirmar) {
+        btnConfirmar.setAttribute("onclick", "aceptarCupoIndividual()");
+    }
+
+    document.getElementById("modal").style.display = "flex";
+}
+
+function aceptarCupoIndividual() {
+    if (materiaPorConfirmar) {
+        materiasSeleccionadas.push(materiaPorConfirmar);
+        materiaPorConfirmar = null;
+        cerrarModal();
+        renderMaterias();
+    }
+}
+
+function cerrarModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+
+function enviarTramiteFinal() {
+    if (materiasSeleccionadas.length === 0) {
+        alert("No has seleccionado ninguna materia para procesar el trámite.");
+        return;
+    }
+
+    let detalle = materiasSeleccionadas.join(", ");
+    document.getElementById("detalleMateria").innerHTML = `
+        ¿Está seguro de enviar su propuesta de inscripción automatizada para las siguientes siglas?<br><br>
+        <strong>${detalle}</strong>
+    `;
+
+    const modalContent = document.querySelector(".modal-content");
+    modalContent.querySelector("h3").innerText = "Confirmar Envío de Trámite";
+    
+    const btnConfirmar = modalContent.querySelector("button");
+    if (btnConfirmar) {
+        btnConfirmar.setAttribute("onclick", "procesarInscripcionServidor()");
+    }
+
+    document.getElementById("modal").style.display = "flex";
+}
+
+
+async function procesarInscripcionServidor() {
+    cerrarModal();
+
+    const solicitudTramite = {
+        ru: usuario.ru,
+        materias: materiasSeleccionadas
+    };
+
+    try {
+        const respuesta = await fetch('/inscripcion', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(solicitudTramite)
+        });
+
+        const datos = await respuesta.json();
+        const contenedorMensaje = document.getElementById("mensaje");
+
+        if (respuesta.ok) {
+            contenedorMensaje.style.color = "initial";
+            
+            let listaMateriasHTML = materiasSeleccionadas.map(m => `<li>📌 Asignatura: <strong>${m}</strong> - Estado: Registrado</li>`).join("");
+            
+            contenedorMensaje.innerHTML = `
+                <div style="background: #ffffff; border: 2px dashed #003366; padding: 20px; border-radius: 10px; margin-top: 25px; text-align: left; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                    <h3 style="text-align: center; color: #003366; margin-bottom: 12px; border-bottom: 1px solid #ddd; padding-bottom: 8px;">📄 COMPROBANTE OFICIAL DE INSCRIPCIÓN</h3>
+                    <p style="margin-bottom: 6px;"><strong>ID Trámite:</strong> <span style="color: #003366;">${datos.id_tramite}</span></p>
+                    <p style="margin-bottom: 6px;"><strong>Estudiante:</strong> ${usuario.nombre} (RU: ${usuario.ru})</p>
+                    <p style="margin-bottom: 6px;"><strong>Fecha de Emisión:</strong> ${new Date().toLocaleString()}</p>
+                    <hr style="margin: 12px 0; border: 1px dashed #ddd;">
+                    <h4 style="color: #003366; margin-bottom: 8px;">Asignaturas Solicitadas:</h4>
+                    <ul style="margin-left: 20px; line-height: 1.6; color: #444;">
+                        ${listaMateriasHTML}
+                    </ul>
+                    <hr style="margin: 12px 0; border: 1px dashed #ddd;">
+                    <p style="font-size: 12px; text-align: center; color: #666; font-style: italic; margin-top: 5px;">
+                        Este documento certifica el ingreso de su solicitud en el sistema.
+                    </p>
+                </div>
+            `;
+            
+            // Guardamos las materias que se acaban de inscribir en la memoria local
+            inscritasEnSesion = [...inscritasEnSesion, ...materiasSeleccionadas];
+            localStorage.setItem(inscripcionesClave, JSON.stringify(inscritasEnSesion));
+
+            // Reiniciamos la selección y repintamos la tabla con el nuevo estado visual
+            materiasSeleccionadas = [];
+            renderMaterias();
+        } else {
+            contenedorMensaje.style.color = "red";
+            contenedorMensaje.innerHTML = `❌ Error: ${datos.mensaje}`;
+        }
+    } catch (error) {
+        console.error("Error de infraestructura:", error);
+        alert("Error al conectar con la API de persistencia JSON.");
+    }
+}
+function mostrarBoletaGuardada() {
+    const inscripcionesClave = `inscritas_${usuario.ru}`;
+    let historialInscrito = localStorage.getItem(inscripcionesClave);
+    const contenedorMensaje = document.getElementById("mensaje");
+
+    // Validamos si el estudiante realmente ya tiene materias inscritas
+    if (!historialInscrito || JSON.parse(historialInscrito).length === 0) {
+        contenedorMensaje.style.color = "red";
+        contenedorMensaje.innerHTML = "❌ No se encontró ninguna boleta activa. Primero debe seleccionar materias y Confirmar Inscripción.";
+        return;
+    }
+
+    let materiasInscritas = JSON.parse(historialInscrito);
+    contenedorMensaje.style.color = "initial";
+
+    // Reconstruimos la lista de materias guardadas en el navegador
+    let listaMateriasHTML = materiasInscritas.map(m => `<li>📌 Asignatura: <strong>${m}</strong> - Estado: Registrado</li>`).join("");
+
+    // Inyectamos el comprobante de auditoría en el contenedor #mensaje
+    contenedorMensaje.innerHTML = `
+        <div style="background: #ffffff; border: 2px dashed #003366; padding: 20px; border-radius: 10px; margin-top: 25px; text-align: left; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <div style="text-align: right;"><button onclick="document.getElementById('mensaje').innerHTML=''" style="background:none; border:none; color:#999; cursor:pointer; font-weight:bold;">❌ Cerrar Vista</button></div>
+            <h3 style="text-align: center; color: #003366; margin-bottom: 12px; border-bottom: 1px solid #ddd; padding-bottom: 8px;">📄 BOLETA REGENERADA DE INSCRIPCIÓN</h3>
+            <p style="margin-bottom: 6px;"><strong>Estudiante:</strong> ${usuario.nombre} (RU: ${usuario.ru})</p>
+            <p style="margin-bottom: 6px;"><strong>Carrera:</strong> ${usuario.carrera}</p>
+            <p style="margin-bottom: 6px;"><strong>Verificación:</strong> Sistema de Kardex Digital UMSA</p>
+            <hr style="margin: 12px 0; border: 1px dashed #ddd;">
+            <h4 style="color: #003366; margin-bottom: 8px;">Asignaturas Consolidadas:</h4>
+            <ul style="margin-left: 20px; line-height: 1.6; color: #444;">
+                ${listaMateriasHTML}
+            </ul>
+            <hr style="margin: 12px 0; border: 1px dashed #ddd;">
+            <p style="font-size: 12px; text-align: center; color: #666; font-style: italic; margin-top: 5px;">
+                Esta boleta es un reflejo de los datos validados y persistidos localmente para el periodo actual.
+            </p>
+        </div>
+    `;
+    
+    // Desplazamos la pantalla automáticamente hacia abajo para que el alumno vea la boleta de inmediato
+    contenedorMensaje.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+<div id="modal" class="modal">
+
+    <div class="modal-content">
+
+        <h3>Confirmar Inscripción</h3>
+
+        <p id="detalleMateria"></p>
+
+        <button onclick="confirmarInscripcion()">
+            Confirmar
+        </button>
+
+        <button onclick="cerrarModal()">
+            Cancelar
+        </button>
+
+    </div>
+
+</div>
+</body>
+</html>

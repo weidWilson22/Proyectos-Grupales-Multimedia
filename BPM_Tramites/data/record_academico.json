@@ -1,0 +1,77 @@
+[
+    {
+        "ru": "2021",
+        "materiasAprobadas": [
+            {
+                "codigo": "INF119",
+                "nombre": "Programación I",
+                "nota": 85
+            },
+            {
+                "codigo": "INF120",
+                "nombre": "Programación II",
+                "nota": 78
+            },
+            {
+                "codigo": "INF210",
+                "nombre": "Estructuras de Datos",
+                "nota": 90
+            },
+            {
+                "codigo": "INF220",
+                "nombre": "Arquitectura de Computadoras",
+                "nota": 82
+            },
+            {
+                "codigo": "INF223",
+                "nombre": "Matemática Discreta",
+                "nota": 75
+            },
+            {
+                "codigo": "INF318",
+                "nombre": "Sistemas Operativos",
+                "nota": 88
+            },
+            {
+                "codigo": "INF310",
+                "nombre": "Análisis Numérico",
+                "nota": 79
+            }
+        ]
+    },
+    {
+        "ru": "2022",
+        "materiasAprobadas": [
+            {
+                "codigo": "INF119",
+                "nombre": "Programación I",
+                "nota": 72
+            },
+            {
+                "codigo": "INF120",
+                "nombre": "Programación II",
+                "nota": 68
+            },
+            {
+                "codigo": "INF210",
+                "nombre": "Estructuras de Datos",
+                "nota": 70
+            }
+        ]
+    },
+    {
+        "ru": "2023",
+        "materiasAprobadas": [
+            {
+                "codigo": "INF119",
+                "nombre": "Programación I",
+                "nota": 91
+            },
+            {
+                "codigo": "INF120",
+                "nombre": "Programación II",
+                "nota": 87
+            }
+        ]
+    }
+]

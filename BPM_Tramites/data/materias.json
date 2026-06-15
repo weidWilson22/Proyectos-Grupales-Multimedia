@@ -1,0 +1,87 @@
+[
+  {
+    "codigo":"INF119",
+    "nombre":"Programación I",
+    "prerrequisitos":[]
+  },
+  {
+    "codigo":"INF120",
+    "nombre":"Programación II",
+    "prerrequisitos":["INF119"]
+  },
+  {
+    "codigo":"INF210",
+    "nombre":"Estructuras de Datos",
+    "prerrequisitos":["INF120"]
+  },
+  {
+    "codigo":"INF220",
+    "nombre":"Arquitectura de Computadoras",
+    "prerrequisitos":["INF210"]
+  },
+  {
+    "codigo":"INF223",
+    "nombre":"Matemática Discreta",
+    "prerrequisitos":["INF210"]
+  },
+  {
+    "codigo":"INF318",
+    "nombre":"Sistemas Operativos",
+    "prerrequisitos":["INF220"]
+  },
+  {
+    "codigo":"INF310",
+    "nombre":"Análisis Numérico",
+    "prerrequisitos":["INF223"]
+  },
+  {
+    "codigo":"INF324",
+    "nombre":"Base de Datos II",
+    "prerrequisitos":["INF318","INF310"]
+  },
+  {
+    "codigo":"INF413",
+    "nombre":"Ingeniería de Software",
+    "prerrequisitos":["INF324"]
+  },
+  {
+    "codigo":"INF412",
+    "nombre":"Redes II",
+    "prerrequisitos":["INF324"]
+  },
+  {
+    "codigo":"INF421",
+    "nombre":"Inteligencia Artificial",
+    "prerrequisitos":["INF324"]
+  },
+  {
+    "codigo":"INF433",
+    "nombre":"Gestión de Proyectos",
+    "prerrequisitos":["INF413"]
+  },
+  {
+    "codigo":"INF442",
+    "nombre":"Seguridad Informática",
+    "prerrequisitos":["INF412"]
+  },
+  {
+    "codigo":"INF431",
+    "nombre":"Machine Learning",
+    "prerrequisitos":["INF421"]
+  },
+  {
+    "codigo":"INF511",
+    "nombre":"Taller de Grado",
+    "prerrequisitos":["INF433"]
+  },
+  {
+    "codigo":"INF512",
+    "nombre":"Proyecto de Grado I",
+    "prerrequisitos":["INF442","INF431"]
+  },
+  {
+    "codigo":"INF513",
+    "nombre":"Proyecto de Grado II",
+    "prerrequisitos":["INF511","INF512"]
+  }
+]

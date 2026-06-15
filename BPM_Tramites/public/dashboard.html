@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard UMSA</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+header{
+
+    background:#003366;
+
+    color:white;
+
+    padding:20px 40px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.container{
+
+    width:90%;
+
+    margin:40px auto;
+}
+
+.titulo{
+
+    color:#003366;
+
+    margin-bottom:30px;
+}
+
+.cards{
+
+    display:flex;
+
+    gap:30px;
+
+    flex-wrap:wrap;
+}
+
+.card{
+
+    flex:1;
+
+    min-width:350px;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+
+    text-align:center;
+}
+
+.card h2{
+
+    color:#003366;
+
+    margin-bottom:20px;
+}
+
+.card p{
+
+    margin-bottom:20px;
+
+    line-height:1.6;
+}
+
+.btn{
+
+    padding:12px 25px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#003366;
+
+    color:white;
+
+    cursor:pointer;
+}
+
+.btn:hover{
+
+    background:#00509d;
+}
+
+.logout{
+
+    margin-top:40px;
+
+    text-align:center;
+}
+
+.logout button{
+
+    background:#c62828;
+}
+
+.logout button:hover{
+
+    background:#a61f1f;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>🎓 UMSA</h1>
+
+    <div id="usuario">
+        Bienvenido
+    </div>
+
+</header>
+
+<div class="container">
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h2>📚 Inscripción de Materias</h2>
+
+            <p>
+                Registro digital de materias
+                para la gestión académica
+                del estudiante.
+            </p>
+
+            <button
+            class="btn"
+            onclick="location.href='inscripcion.html'">
+
+                Ingresar
+
+            </button>
+
+        </div>
+
+        <div class="card">
+
+            <h2>🎓 Solicitud de Título</h2>
+
+            <p>
+                Gestión de documentos
+                y solicitud de emisión
+                del título universitario.
+            </p>
+
+            <button
+            class="btn"
+            onclick="location.href='titulo.html'">
+
+                Ingresar
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="logout">
+
+        <button
+        class="btn"
+        onclick="cerrarSesion()">
+
+        Cerrar Sesión
+
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+let usuario = JSON.parse(
+    localStorage.getItem(
+        "usuarioActivo"
+    )
+);
+
+if(usuario){
+
+    document.getElementById(
+        "usuario"
+    ).innerHTML =
+    "Bienvenido: " +
+    usuario.nombre;
+}
+
+function cerrarSesion(){
+
+    localStorage.removeItem(
+        "usuarioActivo"
+    );
+
+    window.location.href =
+    "index.html";
+}
+</script>
+
+</body>
+</html>

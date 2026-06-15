@@ -1,0 +1,40 @@
+[
+    {
+        "ru": "2021",
+        "nombre": "Juan Pérez",
+        "materias": [
+            "INF324"
+        ],
+        "fecha": "14/6/2026"
+    },
+    {
+        "ru": "2021",
+        "materias": [
+            "INF324"
+        ]
+    },
+    {
+        "ru": "2021",
+        "materias": [
+            "INF324"
+        ]
+    },
+    {
+        "ru": "2021",
+        "materias": [
+            "INF324"
+        ]
+    },
+    {
+        "ru": "2022",
+        "materias": [
+            "INF220"
+        ]
+    },
+    {
+        "ru": "2022",
+        "materias": [
+            "INF223"
+        ]
+    }
+]

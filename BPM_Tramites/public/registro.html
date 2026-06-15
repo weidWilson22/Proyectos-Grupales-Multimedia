@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de Estudiante - UMSA</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+
+    min-height:100vh;
+
+    background:linear-gradient(
+        135deg,
+        #003366,
+        #00509d
+    );
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container{
+
+    width:1000px;
+    max-width:95%;
+
+    background:white;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    display:flex;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+.left-panel{
+
+    width:40%;
+
+    background:#003366;
+
+    color:white;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    padding:40px;
+}
+
+.logo{
+
+    width:120px;
+    height:120px;
+
+    background:white;
+
+    border-radius:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:50px;
+
+    color:#003366;
+
+    margin-bottom:20px;
+}
+
+.left-panel h1{
+
+    margin-bottom:20px;
+}
+
+.left-panel p{
+
+    text-align:center;
+    line-height:1.7;
+}
+
+.right-panel{
+
+    width:60%;
+
+    padding:40px;
+}
+
+.right-panel h2{
+
+    color:#003366;
+
+    margin-bottom:25px;
+
+    text-align:center;
+}
+
+.form-group{
+
+    margin-bottom:15px;
+}
+
+label{
+
+    display:block;
+
+    margin-bottom:5px;
+
+    font-weight:bold;
+}
+
+input, select{
+
+    width:100%;
+
+    padding:12px;
+
+    border:1px solid #ccc;
+
+    border-radius:8px;
+
+    font-size:15px;
+}
+
+.btn{
+
+    width:100%;
+
+    padding:14px;
+
+    background:#003366;
+
+    color:white;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    margin-top:10px;
+}
+
+.btn:hover{
+
+    background:#00509d;
+}
+
+.mensaje{
+
+    text-align:center;
+
+    margin-top:15px;
+
+    font-weight:bold;
+}
+
+.login-link{
+
+    text-align:center;
+
+    margin-top:20px;
+}
+
+.login-link a{
+
+    color:#003366;
+
+    font-weight:bold;
+
+    text-decoration:none;
+}
+
+.login-link a:hover{
+
+    text-decoration:underline;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+```
+<div class="left-panel">
+
+    <div class="logo">
+        🎓
+    </div>
+
+    <h1>UMSA</h1>
+
+    <p>
+        Registro de nuevos estudiantes
+        para el Sistema de Trámites
+        Universitarios.
+    </p>
+
+</div>
+
+<div class="right-panel">
+
+    <h2>Crear Cuenta</h2>
+
+    <div class="form-group">
+        <label>Nombre Completo</label>
+        <input type="text" id="nombre">
+    </div>
+
+    <div class="form-group">
+        <label>Registro Universitario (RU)</label>
+        <input type="text" id="ru">
+    </div>
+
+    <div class="form-group">
+        <label>Carrera</label>
+
+        <select id="carrera">
+
+            <option value="">
+                Seleccione una carrera
+            </option>
+
+            <option>
+                Informática
+            </option>
+
+            <option>
+                Ingeniería de Sistemas
+            </option>
+
+            <option>
+                Estadística
+            </option>
+
+            <option>
+                Ciencias de la Computación
+            </option>
+
+        </select>
+
+    </div>
+
+    <div class="form-group">
+        <label>Correo Electrónico</label>
+        <input type="email" id="correo">
+    </div>
+
+    <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="password">
+    </div>
+
+    <div class="form-group">
+        <label>Confirmar Contraseña</label>
+        <input type="password" id="confirmar">
+    </div>
+
+    <button
+        class="btn"
+        onclick="registrar()">
+
+        Crear Cuenta
+
+    </button>
+
+    <div
+        class="mensaje"
+        id="mensaje">
+    </div>
+
+    <div class="login-link">
+
+        ¿Ya tienes cuenta?
+
+        <a href="index.html">
+            Inicia Sesión
+        </a>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<script>
+
+async function registrar(){
+
+    const estudiante = {
+
+        nombre:
+        document.getElementById("nombre").value,
+
+        ru:
+        document.getElementById("ru").value,
+
+        carrera:
+        document.getElementById("carrera").value,
+
+        correo:
+        document.getElementById("correo").value,
+
+        password:
+        document.getElementById("password").value
+    };
+
+    const respuesta =
+    await fetch(
+        '/registro',
+        {
+            method:'POST',
+
+            headers:{
+                'Content-Type':
+                'application/json'
+            },
+
+            body:
+            JSON.stringify(estudiante)
+        }
+    );
+
+    const datos =
+    await respuesta.json();
+
+    alert(
+        datos.mensaje
+    );
+}
+
+
+
+
+</script>
+
+</body>
+</html>
