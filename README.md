@@ -1,13 +1,16 @@
-# Proyectos-Grupales-Multimedia
-# Proyectos Grupales - Producción Multimedia
+# UNIVERSIDAD MAYOR DE SAN ANDRES
+# FACULTAD DE CIENCIAS PURAS Y NATURALES
+# CARRERA DE INFORMATICA
+## Proyectos-Grupen ekales-Multimedia
+## Proyectos Grupales - Producción Multimedia
 
 Repositorio central con el código fuente y recursos de los proyectos grupales correspondientes a la materia de Multimedia de la Carrera de Informática (UMSA).
 
 ##  Equipo de Trabajo
-* **Integrante 1:** [Nombre y Apellidos]
-* **Integrante 2:** [Nombre y Apellidos]
-* **Integrante 3:** [Nombre y Apellidos]
-* **Integrante 4:** Wilson [Apellidos]
+* **Integrante 1:** CHINO NINA OSCAR
+* **Integrante 2:** MAMANI BAUTISTA WILSON
+* **Integrante 3:** MACHACA CALLISAYA GLADYS JHOSELIN
+* **Integrante 4:** ZAPATA  GUTIERREZ JHORDAN FREDDY
 
 ---
 
@@ -17,14 +20,14 @@ Este repositorio contiene el desarrollo de las siguientes actividades grupales:
 
 ### A. Digitalización de Trámites Universitarios
 Propuesta de modernización digital para dos trámites universitarios, gestionando la información mediante un sistema de almacenamiento BPM basado en archivos JSON, sin bases de datos tradicionales.
-* **Tecnologías:** [Ej: HTML, CSS, JavaScript / C# / Python]
+* **Tecnologías:** : HTML, CSS, JavaScript / C# / PythoN
 * **Estado:** [Completado / En desarrollo]
 
 ### B. Desarrollo 3D y Realidad Virtual
 Desarrollo de entornos virtuales interactivos exportados para visualización en navegador.
 1. **Animación en Unity:** Escena con múltiples personajes realizando una coreografía sincronizada con música, exportada en WebGL.
 2. **Avatar Digital:** Modelo tridimensional de un integrante del grupo generado mediante herramientas de fotogrametría.
-* **Tecnologías:** Unity 3D, WebGL, [Nombre del software de fotogrametría, ej: Meshroom o Polycam].
+* **Tecnologías:** Unity 3D, WebGL, Colmap,Meshlab.
 
 ---
 
@@ -39,10 +42,10 @@ A continuación, se detallan los pasos para ejecutar cada módulo del proyecto e
 4. Los datos se guardarán y leerán dinámicamente desde el archivo `data.json` ubicado en la carpeta raíz.
 
 ### Para la Escena 3D (WebGL)
-1. Navegar a la carpeta `[Nombre_de_la_carpeta_WebGL]`.
+1. Navegar a la carpeta `Unity_Animacion`.
 2. Al estar exportado en WebGL, es necesario levantar un servidor local para evitar bloqueos de CORS en el navegador. 
-3. [Instrucción de ejecución: ej. "Si usa Python, ejecute `python -m http.server` en la terminal, o use la extensión Live Server de VS Code"].
-4. Acceder a `http://localhost:[puerto]` en cualquier navegador moderno.
+3. Instrucción de ejecución:  "Si usa Python, ejecute `python -m http.server` en la terminal".
+4. Acceder a `http://localhost:[puerto]` (poner el puerto designado),en cualquier navegador moderno.
 
 ### Para el Modelo Fotogramétrico
 1. El archivo del modelo final (formato `.obj` o `.gltf`) se encuentra en la ruta `[Ruta_del_modelo]`.
