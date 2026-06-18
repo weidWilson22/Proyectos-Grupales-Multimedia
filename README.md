@@ -13,7 +13,7 @@ Repositorio central con el código fuente y recursos de los proyectos grupales c
 * **Integrante 4:** ZAPATA  GUTIERREZ JHORDAN FREDDY
 
 ---
-
+enlace de l pagina web para poder testear:https://weidwilson22.github.io/Proyectos-Grupales-Multimedia/
 ##  Proyectos Incluidos
 
 Este repositorio contiene el desarrollo de las siguientes actividades grupales:
@@ -38,7 +38,6 @@ A continuación, se detallan los pasos para ejecutar cada módulo del proyecto e
 ### Para el Sistema de Trámites (JSON)
 1. Clonar el repositorio: `git clone [URL_DEL_REPOSITORIO]`
 2. Abrir la carpeta `[Nombre_de_la_carpeta_del_proyecto_A]` en su editor o IDE de preferencia.
-3. [Instrucción específica 1: ej. "Abrir el archivo index.html en el navegador" o "Ejecutar el script principal de Python"].
 4. Los datos se guardarán y leerán dinámicamente desde el archivo `data.json` ubicado en la carpeta raíz.
 
 ### Para la Escena 3D (WebGL)
@@ -48,5 +47,5 @@ A continuación, se detallan los pasos para ejecutar cada módulo del proyecto e
 4. Acceder a `http://localhost:[puerto]` (poner el puerto designado),en cualquier navegador moderno.
 
 ### Para el Modelo Fotogramétrico
-1. El archivo del modelo final (formato `.obj` o `.gltf`) se encuentra en la ruta `[Ruta_del_modelo]`.
+1. El archivo del modelo final  `.obj` se encuentra en la ruta `Fotogrametria`.
 2. Puede ser visualizado directamente en la plataforma web funcional desarrollada para la entrega.
