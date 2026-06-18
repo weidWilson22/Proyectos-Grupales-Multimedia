@@ -1,62 +1,184 @@
 [
     {
-        "ru": "2021",
-        "materiasAprobadas": [
-            {
-                "codigo": "INF119",
-                "nombre": "Programación I",
-                "nota": 85
-            },
-            {
-                "codigo": "INF120",
-                "nombre": "Programación II",
-                "nota": 78
-            },
-            {
-                "codigo": "INF210",
-                "nombre": "Estructuras de Datos",
-                "nota": 90
-            },
-            {
-                "codigo": "INF220",
-                "nombre": "Arquitectura de Computadoras",
-                "nota": 82
-            },
-            {
-                "codigo": "INF223",
-                "nombre": "Matemática Discreta",
-                "nota": 75
-            },
-            {
-                "codigo": "INF318",
-                "nombre": "Sistemas Operativos",
-                "nota": 88
-            },
-            {
-                "codigo": "INF310",
-                "nombre": "Análisis Numérico",
-                "nota": 79
-            }
-        ]
-    },
+    "ru": "2021",
+    "nombre": "Juan Pérez",
+    "carrera": "Informática",
+    "materiasAprobadas": [
+        {
+            "codigo": "INF119",
+            "nombre": "Programación I",
+            "nota": 85
+        },
+        {
+            "codigo": "INF120",
+            "nombre": "Programación II",
+            "nota": 78
+        },
+        {
+            "codigo": "INF210",
+            "nombre": "Estructuras de Datos",
+            "nota": 90
+        },
+        {
+            "codigo": "INF220",
+            "nombre": "Arquitectura de Computadoras",
+            "nota": 82
+        },
+        {
+            "codigo": "INF223",
+            "nombre": "Matemática Discreta",
+            "nota": 75
+        },
+        {
+            "codigo": "INF318",
+            "nombre": "Sistemas Operativos",
+            "nota": 88
+        },
+        {
+            "codigo": "INF310",
+            "nombre": "Análisis Numérico",
+            "nota": 79
+        },
+        {
+            "codigo": "INF111",
+            "nombre": "Introducción a la Informática",
+            "nota": 71
+        },
+        {
+            "codigo": "MAT114",
+            "nombre": "Álgebra",
+            "nota": 68
+        },
+        {
+            "codigo": "INF112",
+            "nombre": "Organización de Computadoras",
+            "nota": 64
+        },
+        {
+            "codigo": "INF121",
+            "nombre": "Algoritmos y Programación",
+            "nota": 80
+        },
+        {
+            "codigo": "INF122",
+            "nombre": "Estructuras Complejas",
+            "nota": 77
+        },
+        {
+            "codigo": "EST123",
+            "nombre": "Estadística I",
+            "nota": 83
+        },
+        {
+            "codigo": "INF211",
+            "nombre": "Sistemas de Información",
+            "nota": 91
+        },
+        {
+            "codigo": "INF212",
+            "nombre": "Base de Datos I",
+            "nota": 86
+        },
+        {
+            "codigo": "INF324",
+            "nombre": "Ingeniería de Software",
+            "nota": 95
+        },
+        {
+            "codigo": "INF325",
+            "nombre": "Tecnología Web",
+            "nota": 89
+        }
+    ]
+},
     {
         "ru": "2022",
         "materiasAprobadas": [
             {
-                "codigo": "INF119",
-                "nombre": "Programación I",
-                "nota": 72
-            },
-            {
-                "codigo": "INF120",
-                "nombre": "Programación II",
-                "nota": 68
-            },
-            {
-                "codigo": "INF210",
-                "nombre": "Estructuras de Datos",
-                "nota": 70
-            }
+            "codigo": "INF119",
+            "nombre": "Programación I",
+            "nota": 85
+        },
+        {
+            "codigo": "INF120",
+            "nombre": "Programación II",
+            "nota": 78
+        },
+        {
+            "codigo": "INF210",
+            "nombre": "Estructuras de Datos",
+            "nota": 90
+        },
+        {
+            "codigo": "INF220",
+            "nombre": "Arquitectura de Computadoras",
+            "nota": 82
+        },
+        {
+            "codigo": "INF223",
+            "nombre": "Matemática Discreta",
+            "nota": 75
+        },
+        {
+            "codigo": "INF318",
+            "nombre": "Sistemas Operativos",
+            "nota": 88
+        },
+        {
+            "codigo": "INF310",
+            "nombre": "Análisis Numérico",
+            "nota": 79
+        },
+        {
+            "codigo": "INF111",
+            "nombre": "Introducción a la Informática",
+            "nota": 71
+        },
+        {
+            "codigo": "MAT114",
+            "nombre": "Álgebra",
+            "nota": 68
+        },
+        {
+            "codigo": "INF112",
+            "nombre": "Organización de Computadoras",
+            "nota": 64
+        },
+        {
+            "codigo": "INF121",
+            "nombre": "Algoritmos y Programación",
+            "nota": 80
+        },
+        {
+            "codigo": "INF122",
+            "nombre": "Estructuras Complejas",
+            "nota": 77
+        },
+        {
+            "codigo": "EST123",
+            "nombre": "Estadística I",
+            "nota": 83
+        },
+        {
+            "codigo": "INF211",
+            "nombre": "Sistemas de Información",
+            "nota": 91
+        },
+        {
+            "codigo": "INF212",
+            "nombre": "Base de Datos I",
+            "nota": 86
+        },
+        {
+            "codigo": "INF324",
+            "nombre": "Ingeniería de Software",
+            "nota": 95
+        },
+        {
+            "codigo": "INF325",
+            "nombre": "Tecnología Web",
+            "nota": 89
+        }
         ]
     },
     {

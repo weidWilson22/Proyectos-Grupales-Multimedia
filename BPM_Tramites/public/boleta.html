@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boleta de Inscripción</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .boleta-container {
+            background: #ffffff;
+            border: 2px dashed #003366;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .btn-volver {
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #003366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .btn-volver:hover {
+            background-color: #002244;
+        }
+        .error-mensaje {
+            color: red;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="boleta-container" id="contenido-boleta">
+        </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const contenedor = document.getElementById("contenido-boleta");
+
+        // 1. Buscamos bajo CUALQUIERA de las dos llaves para asegurar compatibilidad
+        let usuario = JSON.parse(localStorage.getItem("usuarioActivo")) || JSON.parse(localStorage.getItem("usuario")); 
+
+        // RASTREO EN CONSOLA: Abre F12 en tu navegador para ver qué imprime esto
+        console.log("Datos de usuario recuperados en boleta:", usuario);
+
+        if (!usuario || !usuario.ru) {
+            contenedor.innerHTML = `
+                <p class="error-mensaje">❌ Error: No se detectó ninguna sesión de estudiante activa.</p>
+                <a href="index.html" class="btn-volver">Ir al Login</a>
+            `;
+            return;
+        }
+
+        // 2. Obtener las materias inscritas asociadas a su RU
+        const inscripcionesClave = `inscritas_${usuario.ru}`;
+        const historialInscrito = localStorage.getItem(inscripcionesClave);
+
+        console.log("Clave buscada:", inscripcionesClave);
+        console.log("Materias encontradas en LocalStorage:", historialInscrito);
+
+        if (!historialInscrito || JSON.parse(historialInscrito).length === 0) {
+            contenedor.innerHTML = `
+                <h3 style="text-align: center; color: #003366;">📄 BOLETA DE INSCRIPCIÓN</h3>
+                <p class="error-mensaje">❌ No se encontró ninguna boleta activa para el RU ${usuario.ru}.</p>
+                <a href="inscripcion.html" class="btn-volver">Volver a Inscripciones</a>
+            `;
+            return;
+        }
+
+        const codigosInscritos = JSON.parse(historialInscrito);
+
+        try {
+            // 3. Consultar la lista de materias al servidor
+            const respuesta = await fetch('/materias');
+            const DB_materias = await respuesta.json();
+
+            // 4. Cruzar los códigos
+            const listaMateriasHTML = codigosInscritos.map(codigo => {
+                const materiaData = DB_materias.find(m => m.codigo === codigo || m.sigla === codigo);
+                const nombreMateria = materiaData ? materiaData.nombre : "Asignatura de Informática";
+                return `<li>📌 <strong>${codigo}</strong> - ${nombreMateria} (<span style="color: green; font-weight: bold;">Registrado</span>)</li>`;
+            }).join("");
+
+            // 5. Inyectar la boleta oficial finalizada
+            contenedor.innerHTML = `
+                <h3 style="text-align: center; color: #003366; margin-top: 0; margin-bottom: 12px; border-bottom: 1px solid #ddd; padding-bottom: 8px;">📄 BOLETA OFICIAL DE INSCRIPCIÓN</h3>
+                <p style="margin-bottom: 6px;"><strong>Estudiante:</strong> ${usuario.nombre}</p>
+                <p style="margin-bottom: 6px;"><strong>R.U.:</strong> ${usuario.ru}</p>
+                <p style="margin-bottom: 6px;"><strong>Carrera:</strong> ${usuario.carrera}</p>
+                <p style="margin-bottom: 6px;"><strong>Verificación:</strong> Sistema de Kardex Digital UMSA</p>
+                <hr style="margin: 12px 0; border: 1px dashed #ddd;">
+                <h4 style="color: #003366; margin-bottom: 8px;">Asignaturas Consolidadas:</h4>
+                <ul style="margin-left: 20px; line-height: 1.8; color: #444;">
+                    ${listaMateriasHTML}
+                </ul>
+                <hr style="margin: 12px 0; border: 1px dashed #ddd;">
+                <p style="font-size: 11px; text-align: center; color: #666; font-style: italic; margin-top: 5px;">
+                    Esta boleta es un reflejo de los datos validados y persistidos en el sistema para el periodo actual.
+                </p>
+                <button onclick="window.print()" style="width:100%; margin-top:10px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">🖨️ Imprimir / Guardar PDF</button>
+                <a href="inscripcion.html" class="btn-volver" style="background-color:#6c757d;">Anterior</a>
+            `;
+
+        } catch (error) {
+            console.error("Error cargando materias:", error);
+            contenedor.innerHTML = `<p class="error-mensaje">❌ Error de conexión al recuperar las asignaturas.</p>`;
+        }
+    });
+</script>
+</body>
+</html>

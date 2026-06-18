@@ -233,57 +233,56 @@
 </div>
 
 <script>
+async function login() {
+    const ru = document.getElementById("ru").value;
+    const password = document.getElementById("password").value;
 
-async function login(){
+    // =========================================================
+    // INTERCEPCIÓN PARA EL ADMINISTRADOR (R.U: 8080 | PIN: 12345)
+    // =========================================================
+    if (ru === "8080" && password === "12345") {
+        alert("👨‍💼 ¡Bienvenido al Panel de Control de Kárdex!");
+        
+        // Guardamos los datos simulados del administrador en sesión
+        localStorage.setItem("usuarioActivo", JSON.stringify({
+            ru: "8080",
+            nombre: "Administrador Kárdex",
+            rol: "admin"
+        }));
+        
+        window.location.href = "admin.html"; // Redirección directa al panel de administración
+        return; // Detiene la ejecución para que no haga el fetch de estudiante común
+    }
+    // =========================================================
 
-    const ru =
-        document.getElementById("ru").value;
+    // FLUJO NORMAL PARA LOS ESTUDIANTES (FETCH AL BACKEND)
+    const respuesta = await fetch(
+        "/login",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                ru,
+                password
+            })
+        }
+    );
 
-    const password =
-        document.getElementById("password").value;
+    const datos = await respuesta.json();
 
-    const respuesta =
-        await fetch(
-            "/login",
-            {
-                method:"POST",
-
-                headers:{
-                    "Content-Type":
-                    "application/json"
-                },
-
-                body:JSON.stringify({
-                    ru,
-                    password
-                })
-            }
-        );
-
-    const datos =
-        await respuesta.json();
-
-    if(datos.success){
-
+    if (datos.success) {
         localStorage.setItem(
             "usuarioActivo",
-            JSON.stringify(
-                datos.usuario
-            )
+            JSON.stringify(datos.usuario)
         );
 
-        window.location.href =
-            "dashboard.html";
-    }
-    else{
-
-        document.getElementById(
-            "mensaje"
-        ).innerHTML =
-        datos.mensaje;
+        window.location.href = "dashboard.html";
+    } else {
+        document.getElementById("mensaje").innerHTML = datos.mensaje;
     }
 }
 </script>
-
 </body>
 </html>

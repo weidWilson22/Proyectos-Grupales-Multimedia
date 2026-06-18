@@ -1,0 +1,22 @@
+[
+    {
+        "id_tramite": "TIT-1781783168853",
+        "ru": "2021",
+        "nombre_estudiante": "Juan Pérez",
+        "ci_estudiante": "543534",
+        "modalidad": "Tesis de Grado",
+        "proyecto": "Programacion cuantica",
+        "estado_actual": "Revision_Documentos",
+        "fecha_creacion": "2026-06-18T11:46:08.853Z"
+    },
+    {
+        "id_tramite": "TIT-1781787072142",
+        "ru": "2022",
+        "nombre_estudiante": "María López",
+        "ci_estudiante": "42343",
+        "modalidad": "Tesis de Grado",
+        "proyecto": "Programacion cuantica",
+        "estado_actual": "Revision_Documentos",
+        "fecha_creacion": "2026-06-18T12:51:12.143Z"
+    }
+]

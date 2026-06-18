@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Requisitos - UMSA</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h2 {
+            color: #003366;
+            margin-top: 0;
+            font-size: 24px;
+            border-bottom: 2px solid #003366;
+            padding-bottom: 8px;
+        }
+        .indicacion {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .alerta-pendiente {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            border: 1px solid #ffeeba;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 18px;
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #333;
+            font-size: 14px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #fdfdfd;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #00509d;
+            background: #fff;
+        }
+        input:disabled {
+            background-color: #e9ecef;
+            color: #495057;
+            cursor: not-allowed;
+        }
+        .bton-contenedor {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .btn {
+            flex: 1;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .btn-enviar {
+            background-color: #28a745;
+        }
+        .btn-enviar:hover {
+            background-color: #218838;
+        }
+        .btn-enviar:disabled {
+            background-color: #6c757d;
+        }
+        .btn-anterior {
+            background-color: #00509d;
+        }
+        .btn-anterior:hover {
+            background-color: #003f7a;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="panel-requisitos">
+        <p style="text-align: center; color: #666;">Cargando formulario de requisitos...</p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            verificarYRenderizar();
+        });
+
+        function verificarYRenderizar() {
+            const panel = document.getElementById("panel-requisitos");
+            let usuario = JSON.parse(localStorage.getItem("usuarioActivo")) || JSON.parse(localStorage.getItem("usuario"));
+
+            if (!usuario || !usuario.ru) {
+                panel.innerHTML = `
+                    <div style="background-color: #f8d7da; color: #721c24; padding: 20px; border-radius: 6px; font-weight: bold; text-align: center;">
+                        ❌ Error: No se detectó ninguna sesión de estudiante activa.
+                    </div>
+                    <button class="btn btn-anterior" style="margin-top: 15px; width: 100%;" onclick="window.location.href='index.html'">Ir al Login</button>
+                `;
+                return;
+            }
+
+            // Bloqueo si el trámite ya está enviado en LocalStorage
+            const estadoClave = `estado_tramite_${usuario.ru}`;
+            const estadoTramite = localStorage.getItem(estadoClave);
+
+            if (estadoTramite === "Pendiente") {
+                panel.innerHTML = `
+                    <h2>📋 Formulario de Requisitos</h2>
+                    <div class="alerta-pendiente">
+                        ⏳ Estado: Solicitud Pendiente de Revisión
+                    </div>
+                    <p style="text-align: center; color: #555; line-height: 1.6;">
+                        Tu formulario de registro de modalidad ya fue enviado al Kárdex Académico.<br>
+                        Por favor, espera a que un administrador evalúe los datos y otorgue el visto bueno.
+                    </p>
+                    <div class="bton-contenedor">
+                        <button class="btn btn-anterior" style="width: 100%;" onclick="window.location.href='index.html'">
+                            Volver al Menú
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Renderizar el formulario limpio con datos automáticos y manuales
+            panel.innerHTML = `
+                <h2>📋 Formulario de Requisitos de Titulación</h2>
+                <p class="indicacion">
+                    Por favor, confirme sus datos institucionales y registre el título oficial de su modalidad de graduación.
+                </p>
+
+                <form id="formRequisitos" onsubmit="enviarSolicitudTramite(event)">
+                    
+                    <div class="form-group">
+                        <label>Nombre Completo:</label>
+                        <input type="text" id="txtNombre" value="${usuario.nombre}" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Registro Universitario (R.U.):</label>
+                        <input type="text" id="txtRu" value="${usuario.ru}" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtCi">Cédula de Identidad (C.I.):</label>
+                        <input type="text" id="txtCi" placeholder="Ej. 8432114 LP" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtTitulo">Título de la Tesis / Proyecto:</label>
+                        <input type="text" id="txtTitulo" placeholder="Ej. Criptografía caótica aplicada a imágenes digitales" required>
+                    </div>
+
+                    <div class="bton-contenedor">
+                        <button type="submit" id="btnEnviar" class="btn btn-enviar">
+                            Enviar Solicitud
+                        </button>
+                        <button type="button" class="btn btn-anterior" onclick="history.back()">
+                            Anterior
+                        </button>
+                    </div>
+                </form>
+            `;
+        }
+
+        async function enviarSolicitudTramite(event) {
+            event.preventDefault();
+            
+            const btn = document.getElementById("btnEnviar");
+            btn.disabled = true;
+            btn.innerText = "Enviando...";
+
+            let usuario = JSON.parse(localStorage.getItem("usuarioActivo")) || JSON.parse(localStorage.getItem("usuario"));
+            
+            const ciIngresado = document.getElementById("txtCi").value;
+            const tituloIngresado = document.getElementById("txtTitulo").value;
+
+            // Payload limpio estructurado solo con texto
+            const payload = {
+                ru: usuario.ru,
+                nombre: usuario.nombre,
+                ci: ciIngresado,
+                modalidad: "Tesis de Grado",
+                proyecto: tituloIngresado
+            };
+
+            try {
+                const respuesta = await fetch('/solicitud-titulo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const resultado = await respuesta.json();
+
+                if (respuesta.ok) {
+                    alert(`🎉 ¡Solicitud Enviada con Éxito!\nTrámite: ${resultado.id_tramite}`);
+                    localStorage.setItem(`estado_tramite_${usuario.ru}`, "Pendiente");
+                    verificarYRenderizar();
+                } else {
+                    alert(`⚠️ Servidor: ${resultado.mensaje}`);
+                    btn.disabled = false;
+                    btn.innerText = "Enviar Solicitud";
+                }
+            } catch (error) {
+                console.error("Error de red:", error);
+                alert("❌ Error de comunicación con el backend. Revisa tu terminal de Node.");
+                btn.disabled = false;
+                btn.innerText = "Enviar Solicitud";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -142,12 +142,10 @@ ul{
 
     font-size:15px;
 }
-
 .btn:hover{
 
     background:#00509d;
 }
-
 #mensaje{
 
     margin-top:20px;
@@ -156,7 +154,6 @@ ul{
 
     color:green;
 }
-
 hr{
 
     margin:20px 0;
@@ -238,9 +235,16 @@ hr{
 </table>
 
         <button class="btn" onclick="enviarTramiteFinal()">Confirmar Inscripción</button>
-        <button class="btn" id="btnVerBoleta" onclick="mostrarBoletaGuardada()" style="background-color: #00509d; margin-top: 10px;">
-    📋 Mostrar Boleta de Inscripción
+        <button class="btn" id="btnVerBoleta"
+        onclick="window.location.href='dashboard.html'"
+        style="background-color: #00509d; margin-top: 10px;">
+    Anterior
 </button>
+        <button class="btn" id="btnVerBoleta"
+        onclick="window.location.href='boleta.html'"
+        style="background-color: #00509d; margin-top: 10px;">
+    Siguiente</button>
+    
         <p id="mensaje"></p>
 
     </div>
@@ -530,34 +534,11 @@ function mostrarBoletaGuardada() {
         return;
     }
 
-    let materiasInscritas = JSON.parse(historialInscrito);
-    contenedorMensaje.style.color = "initial";
+    // ¡ESTA LÍNEA SANA EL ERROR! Aseguramos que boleta.html encuentre los datos usando "usuario"
+    localStorage.setItem("usuario", JSON.stringify(usuario));
 
-    // Reconstruimos la lista de materias guardadas en el navegador
-    let listaMateriasHTML = materiasInscritas.map(m => `<li>📌 Asignatura: <strong>${m}</strong> - Estado: Registrado</li>`).join("");
-
-    // Inyectamos el comprobante de auditoría en el contenedor #mensaje
-    contenedorMensaje.innerHTML = `
-        <div style="background: #ffffff; border: 2px dashed #003366; padding: 20px; border-radius: 10px; margin-top: 25px; text-align: left; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-            <div style="text-align: right;"><button onclick="document.getElementById('mensaje').innerHTML=''" style="background:none; border:none; color:#999; cursor:pointer; font-weight:bold;">❌ Cerrar Vista</button></div>
-            <h3 style="text-align: center; color: #003366; margin-bottom: 12px; border-bottom: 1px solid #ddd; padding-bottom: 8px;">📄 BOLETA REGENERADA DE INSCRIPCIÓN</h3>
-            <p style="margin-bottom: 6px;"><strong>Estudiante:</strong> ${usuario.nombre} (RU: ${usuario.ru})</p>
-            <p style="margin-bottom: 6px;"><strong>Carrera:</strong> ${usuario.carrera}</p>
-            <p style="margin-bottom: 6px;"><strong>Verificación:</strong> Sistema de Kardex Digital UMSA</p>
-            <hr style="margin: 12px 0; border: 1px dashed #ddd;">
-            <h4 style="color: #003366; margin-bottom: 8px;">Asignaturas Consolidadas:</h4>
-            <ul style="margin-left: 20px; line-height: 1.6; color: #444;">
-                ${listaMateriasHTML}
-            </ul>
-            <hr style="margin: 12px 0; border: 1px dashed #ddd;">
-            <p style="font-size: 12px; text-align: center; color: #666; font-style: italic; margin-top: 5px;">
-                Esta boleta es un reflejo de los datos validados y persistidos localmente para el periodo actual.
-            </p>
-        </div>
-    `;
-    
-    // Desplazamos la pantalla automáticamente hacia abajo para que el alumno vea la boleta de inmediato
-    contenedorMensaje.scrollIntoView({ behavior: 'smooth' });
+    // Redireccionamos limpiamente a tu nueva ventana dedicada
+    window.location.href = "boleta.html";
 }
 </script>
 <div id="modal" class="modal">

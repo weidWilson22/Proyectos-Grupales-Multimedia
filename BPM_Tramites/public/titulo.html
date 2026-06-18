@@ -3,176 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitud de Título Profesional</title>
+    <title>Verificación de Titulación - UMSA</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #f4f6f9; }
-        header { background: #003366; color: white; padding: 20px; text-align: center; }
-        .container { width: 90%; max-width: 800px; margin: 30px auto; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,.15); }
-        h2 { color: #003366; margin-bottom: 15px; border-bottom: 2px solid #003366; padding-bottom: 5px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; }
-        select, input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; }
-        .btn { padding: 12px 25px; border: none; border-radius: 8px; background: #003366; color: white; cursor: pointer; font-size: 15px; width: 100%; }
-        .btn:hover { background: #00509d; }
-        .btn:disabled { background: #ccc; cursor: not-allowed; }
-        .alerta { padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; text-align: center; }
-        .alerta-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .alerta-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        #mensaje { margin-top: 20px; font-weight: bold; text-align: center; }
-        .btn-regresar { background: #6c757d; margin-top: 10px; }
-        .btn-regresar:hover { background: #5a6268; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 650px;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h2 {
+            color: #003366;
+            margin-top: 0;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .alerta-verde {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            font-size: 16px;
+        }
+        .alerta-roja {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            border: 1px solid #f5c6cb;
+            text-align: center;
+        }
+        .seccion-datos {
+            margin-bottom: 25px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #00509d;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        .seccion-datos strong {
+            color: #333;
+        }
+        .bton-contenedor {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn {
+            flex: 1;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        .btn-siguiente {
+            background-color: #00509d;
+        }
+        .btn-siguiente:hover {
+            background-color: #003f7a;
+        }
+        .btn-anterior {
+            background-color: #00509d;
+        }
+        .btn-anterior:hover {
+            background-color: #003f7a;
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>🎓 División de Títulos y Diplomas UMSA</h1>
-</header>
-
-<div class="container">
-    <div class="card">
-        <h2>📋 Verificación Académica</h2>
-        <div id="validacionEstudiante">Cargando datos y validando expediente...</div>
-        
-        <div id="formularioTramite" style="display: none; margin-top: 20px;">
-            <h2>📝 Formulario de Solicitud</h2>
-            <div class="form-group">
-                <label for="modalidad">Modalidad de Titulación:</label>
-                <select id="modalidad" onchange="evaluarModalidad()">
-                    <option value="Excelencia Académica">Excelencia Académica</option>
-                    <option value="Tesis de Grado">Tesis de Grado</option>
-                    <option value="Trabajo Dirigido">Trabajo Dirigido</option>
-                    <option value="Proyecto de Grado">Proyecto de Grado</option>
-                </select>
-            </div>
-            
-            <div class="form-group" id="grupoProyecto" style="display: none;">
-                <label for="proyecto">Título del Proyecto / Tesis:</label>
-                <input type="text" id="proyecto" placeholder="Escriba el nombre de su investigación técnica">
-            </div>
-            
-            <button class="btn" id="btnEnviar" onclick="enviarSolicitud()">Iniciar Trámite de Titulación</button>
-        </div>
-        
-        <p id="mensaje"></p>
-        
-        <button class="btn btn-regresar" onclick="location.href='dashboard.html'">Volver al Menú</button>
+    <div class="container" id="panel-tramite">
+        <p style="text-align: center; color: #666;">Verificando expediente del estudiante...</p>
     </div>
-</div>
 
-<script>
-let usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
+    <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const panel = document.getElementById("panel-tramite");
 
-if (!usuario) {
-    alert("Sesión inválida.");
-    window.location.href = "index.html";
-}
+        // 1. Recuperar la sesión del estudiante logueado
+        let usuario = JSON.parse(localStorage.getItem("usuarioActivo")) || JSON.parse(localStorage.getItem("usuario"));
 
-let todasLasMaterias = [];
-let recordEstudiante = null;
-
-// Cargar datos académicos para contrastar reglas de negocio
-Promise.all([
-    fetch("/data/materias.json").then(r => r.json()),
-    fetch("/data/record_academico.json").then(r => r.json())
-])
-.then(([materias, records]) => {
-    todasLasMaterias = materias;
-    recordEstudiante = records.find(r => r.ru === usuario.ru);
-    
-    verificarElegibilidad();
-})
-.catch(err => console.error("Error al conectar con los almacenes JSON:", err));
-
-function verificarElegibilidad() {
-    const contenedor = document.getElementById("validacionEstudiante");
-    const formulario = document.getElementById("formularioTramite");
-    
-    if (!recordEstudiante) {
-        contenedor.innerHTML = `<div class="alerta alerta-error">❌ No se encontró historial académico registrado para el RU ${usuario.ru}.</div>`;
-        return;
-    }
-    
-    // Regla BPM: Cantidad de aprobadas debe ser igual al universo total de materias del plan
-    const totalPlan = todasLasMaterias.length;
-    const totalAprobadas = recordEstudiante.materiasAprobadas.length;
-    
-    if (totalAprobadas >= totalPlan) {
-        contenedor.innerHTML = `
-            <div class="alerta alerta-success">✔️ ¡Expediente Valido! Has aprobado las ${totalAprobadas} materias del plan curricular.</div>
-            <strong>Postulante:</strong> ${usuario.nombre}<br>
-            <strong>Carrera:</strong> ${usuario.carrera}<br>
-        `;
-        formulario.style.display = "block"; // Habilitamos el formulario si cumple
-    } else {
-        const faltantes = totalPlan - totalAprobadas;
-        contenedor.innerHTML = `
-            <div class="alerta alerta-error">❌ Trámite Bloqueado: No cumples con los requisitos de egreso.</div>
-            <p>Para iniciar la modalidad de titulación debes concluir el plan de estudios.</p><br>
-            <strong>Materias Aprobadas:</strong> ${totalAprobadas} de ${totalPlan}<br>
-            <strong>Materias Faltantes:</strong> ${faltantes} asignaturas.
-        `;
-    }
-}
-
-function evaluarModalidad() {
-    const mod = document.getElementById("modalidad").value;
-    const grupoProyecto = document.getElementById("grupoProyecto");
-    
-    // Si requiere defensa, habilitamos el campo de texto para el título del proyecto
-    if (mod === "Excelencia Académica") {
-        grupoProyecto.style.display = "none";
-        document.getElementById("proyecto").value = "";
-    } else {
-        grupoProyecto.style.display = "block";
-    }
-}
-
-async function enviarSolicitud() {
-    const mod = document.getElementById("modalidad").value;
-    const proy = document.getElementById("proyecto").value;
-    
-    if (mod !== "Excelencia Académica" && !proy.trim()) {
-        alert("Por favor, introduzca el nombre de su tema de grado.");
-        return;
-    }
-    
-    const btn = document.getElementById("btnEnviar");
-    btn.disabled = true;
-    
-    const payload = {
-        ru: usuario.ru,
-        modalidad: mod,
-        proyecto: proy
-    };
-    
-    try {
-        const res = await fetch('/solicitud-titulo', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        
-        const datos = await res.json();
-        const msg = document.getElementById("mensaje");
-        
-        if (res.ok) {
-            msg.style.color = "green";
-            msg.innerHTML = `✔️ Solicitud enviada al área de Títulos.<br>Código de Trámite asignado: <strong>${datos.id_tramite}</strong>`;
-            document.getElementById("formularioTramite").style.display = "none";
-        } else {
-            msg.style.color = "red";
-            msg.innerHTML = `❌ Error: ${datos.mensaje}`;
-            btn.disabled = false;
+        // Si no hay sesión activa
+        if (!usuario || !usuario.ru) {
+            panel.innerHTML = `
+                <div class="alerta-roja">
+                    ❌ Error: No se detectó ninguna sesión de estudiante activa.
+                </div>
+                <button class="btn btn-anterior" style="margin-top: 15px; width: 100%;" onclick="window.location.href='index.html'">Ir al Login</button>
+            `;
+            return;
         }
-    } catch (error) {
-        console.error(error);
-        alert("Fallo de comunicación con la infraestructura del servidor.");
-        btn.disabled = false;
-    }
-}
+
+        try {
+            // 2. Consultar el archivo JSON de récords académicos
+            const respuestaRecord = await fetch('/data/record_academico.json');
+            const records = await respuestaRecord.json();
+
+            const expediente = records.find(r => r.ru === usuario.ru);
+            const materiasAprobadas = expediente ? expediente.materiasAprobadas : [];
+            const totalAprobadas = materiasAprobadas.length;
+            const totalPlanCurricular = 17; 
+
+            // 3. SI NO CUMPLE CON LAS 17 MATERIAS: Se bloquea y NO se muestra el botón Siguiente
+            if (totalAprobadas < totalPlanCurricular) {
+                panel.innerHTML = `
+                    <h2>📋 Verificación Académica</h2>
+                    <div class="alerta-roja" style="text-align: left; margin-bottom: 25px;">
+                        ❌ Requisito Insuficiente. <br><br>
+                        Para iniciar el trámite de titulación debes concluir el plan de estudios obligatorio.<br><br>
+                        <strong>Materias Aprobadas:</strong> ${totalAprobadas} de ${totalPlanCurricular}<br>
+                        <strong>Materias Faltantes:</strong> ${totalPlanCurricular - totalAprobadas} asignaturas.
+                    </div>
+
+                    <div class="bton-contenedor">
+                        <button class="btn btn-anterior" style="width: 100%;" onclick="history.back()">
+                            Anterior
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            // 4. SI CUMPLE CON LAS 17 MATERIAS: Se le muestra el éxito y ambos botones para avanzar
+            panel.innerHTML = `
+                <h2>📋 Verificación Académica</h2>
+                
+                <div class="alerta-verde">
+                    ✓ ¡Expediente Válido! Has aprobado las ${totalPlanCurricular} materias del plan curricular.
+                </div>
+
+                <div class="seccion-datos">
+                    <strong>Postulante:</strong> ${usuario.nombre}<br>
+                    <strong>Carrera:</strong> ${usuario.carrera}<br>
+                    <strong>R.U.:</strong> ${usuario.ru}
+                </div>
+
+                <div class="bton-contenedor">
+                    <button class="btn btn-anterior" onclick="window.location.href='dashboard.html'">
+                        Anterior
+                    </button>
+                    <button class="btn btn-siguiente" onclick="window.location.href='requisito.html'">
+                        Siguiente
+                    </button>
+                    
+                </div>
+            `;
+
+        } catch (error) {
+            console.error("Error al cargar los datos de verificación:", error);
+            panel.innerHTML = `<div class="alerta-roja">❌ Error de infraestructura al conectar con el Kárdex Digital.</div>`;
+        }
+    });
 </script>
 </body>
 </html>
