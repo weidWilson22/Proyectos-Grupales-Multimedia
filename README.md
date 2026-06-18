@@ -1,10 +1,9 @@
 # UNIVERSIDAD MAYOR DE SAN ANDRES
 # FACULTAD DE CIENCIAS PURAS Y NATURALES
 # CARRERA DE INFORMATICA
-## Proyectos-Grupen ekales-Multimedia
 ## Proyectos Grupales - Producción Multimedia
 
-Repositorio central con el código fuente y recursos de los proyectos grupales correspondientes a la materia de Multimedia de la Carrera de Informática (UMSA).
+Repositorio con el código fuente de los proyectos grupales.
 
 ##  Equipo de Trabajo
 * **Integrante 1:** CHINO NINA OSCAR
