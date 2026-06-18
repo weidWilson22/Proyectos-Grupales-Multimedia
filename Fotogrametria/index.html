@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Avatar 3D</title>
+<meta charset="UTF-8">
+<title>Avatar 3D</title>
 
-    <style>
-        body{
-            margin:0;
-            overflow:hidden;
-        }
-    </style>
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+}
+canvas{
+    display:block;
+}
+</style>
 
-    <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-      }
-    }
-    </script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+
 </head>
-
 <body>
 
 <script type="module">
@@ -38,34 +41,83 @@ const camera = new THREE.PerspectiveCamera(
     1000
 );
 
-const renderer = new THREE.WebGLRenderer({ antialias:true });
-renderer.setSize(window.innerWidth, window.innerHeight);
+camera.position.set(0, 0, 5);
+
+const renderer = new THREE.WebGLRenderer({
+    antialias: true
+});
+
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
 document.body.appendChild(renderer.domElement);
 
+// Luces
 const light = new THREE.DirectionalLight(0xffffff, 3);
-light.position.set(5,5,5);
+light.position.set(5, 5, 5);
 scene.add(light);
 
 const ambient = new THREE.AmbientLight(0xffffff, 2);
 scene.add(ambient);
 
-const controls = new OrbitControls(camera, renderer.domElement);
+// Controles
+const controls = new OrbitControls(
+    camera,
+    renderer.domElement
+);
 
+controls.enableDamping = true;
+
+// Cargar OBJ
 const loader = new OBJLoader();
 
 loader.load(
-    'Avatar.obj',
+
+    'Resultado.obj',
 
     function(objeto){
 
-        objeto.scale.set(0.05,0.05,0.05);
-
         scene.add(objeto);
 
-        const box = new THREE.Box3().setFromObject(objeto);
-        const center = box.getCenter(new THREE.Vector3());
+        // Rotación inicial
+        objeto.rotation.x = Math.PI;
 
-        objeto.position.sub(center);
+        // Caja envolvente
+        const box = new THREE.Box3().setFromObject(objeto);
+
+        const size = box.getSize(
+            new THREE.Vector3()
+        );
+
+        const center = box.getCenter(
+            new THREE.Vector3()
+        );
+
+        // Centrar
+        objeto.position.x -= center.x;
+        objeto.position.y -= center.y;
+        objeto.position.z -= center.z;
+
+        // Escalado automático
+        const maxDim = Math.max(
+            size.x,
+            size.y,
+            size.z
+        );
+
+        const scale = 3 / maxDim;
+
+        objeto.scale.set(
+            scale,
+            scale,
+            scale
+        );
+
+        controls.target.set(0,0,0);
+        controls.update();
+
     },
 
     undefined,
@@ -73,14 +125,39 @@ loader.load(
     function(error){
         console.error(error);
     }
+
 );
 
-camera.position.z = 5;
+// Redimensionar ventana
+window.addEventListener('resize', () => {
 
+    camera.aspect =
+        window.innerWidth /
+        window.innerHeight;
+
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+});
+
+// Animación
 function animate(){
-    requestAnimationFrame(animate);
+
+    requestAnimationFrame(
+        animate
+    );
+
     controls.update();
-    renderer.render(scene,camera);
+
+    renderer.render(
+        scene,
+        camera
+    );
+
 }
 
 animate();
